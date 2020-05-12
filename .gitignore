@@ -1,3 +1,15 @@
+# Workflow memory files
+.snakemake/
+.vscode/
+dag.svg
+
+# Data files and plots
+data/
+plots/
+
+# local dit install
+src/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

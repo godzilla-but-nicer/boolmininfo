@@ -1,0 +1,17 @@
+# set the directories below and copy this file as `config.yaml`
+data_dir: "./data/"
+paper_dir: "./paper/current/"
+
+eca_decompositions:
+  broja: "data/eca_decompositions/broja_df.csv"
+  ccs: "data/eca_decompositions/ccs_df.csv"
+  dep: "data/eca_decompositions/dep_df.csv"
+  imin: "data/eca_decompositions/imin_df.csv"
+  pm: "data/eca_decompositions/pm_df.csv"
+
+eca_scripts:
+  broja: "scripts/decompositions/eca_analysis_broja.py"
+  ccs: "scripts/decompositions/eca_analysis_ccs.py"
+  dep: "scripts/decompositions/eca_analysis_dep.py"
+  imin: "scripts/decompositions/eca_analysis_imin.py"
+  pm: "scripts/decompositions/eca_analysis_pm.py"

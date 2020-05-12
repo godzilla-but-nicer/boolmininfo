@@ -23,10 +23,22 @@ rule paper:
         "cd {params.paper_dir}; make"
 
 
-# rule some_data_processing:
-    # input:
-        # "data/some_data.csv"
-    # output:
-        # "data/derived/some_derived_data.csv"
-    # script:
-        # "workflow/scripts/process_some_data.py"
+rule eca_decomposition:
+    input:
+        "scripts/eca_analysis_{method}.py"
+    output:
+        "data/eca_decompositions/{method}_df.csv"
+    shell:
+        "python scripts/eca_analysis_{wildcards.method}.py"
+
+rule eca_pid_correlations:
+    input:
+        expand("data/eca_decompositions/{method}_df.csv", method=config['eca_decompositions'])
+    output:
+        red="plots/eca_pid_corr/redundancy.png",
+        uni="plots/eca_pid_corr/unique.png",
+        syn="plots/eca_pid_corr/synergy.png",
+        avg="plots/eca_pid_corr/average.png",
+        dist="plots/eca_pid_corr/corr_dists.png"
+    script:
+        "scripts/plot_eca_pid_correlations.py"
