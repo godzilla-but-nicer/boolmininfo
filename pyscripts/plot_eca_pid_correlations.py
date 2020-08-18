@@ -4,16 +4,20 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # load all of the neccesary dataframes
-broja = pd.read_csv(snakemake.config['eca_decompositions']['broja'])
+wedge = pd.read_csv(snakemake.config['eca_decompositions']['wedge'])
 ccs = pd.read_csv(snakemake.config['eca_decompositions']['ccs'])
-dep = pd.read_csv(snakemake.config['eca_decompositions']['dep'])
 imin = pd.read_csv(snakemake.config['eca_decompositions']['imin'])
 pm = pd.read_csv(snakemake.config['eca_decompositions']['pm'])
+bld = pd.read_csv(snakemake.config['eca_decompositions']['boolean'])
+# syndisc and gh not working yet. Also add them to lists below
+# syndisc = pd.read_csv(snakemake.config['eca_decompositions']['syndisc'])
+# gh = pd.read_csv(snakemake.config['eca_decompositions']['gh'])
+
 
 # Make new dataframes by PI term
-df_list = [broja, ccs, dep, imin, pm]
-labels = ['broja', 'ccs', 'dep', 'imin', 'pm']
-terms = broja.drop(['Unnamed: 0', 'rule'], axis=1).columns
+df_list = [wedge, ccs, imin, pm, bld]
+labels = ['wedge', 'ccs', 'imin', 'pm', 'bld']
+terms = imin.drop(['Unnamed: 0', 'rule'], axis=1).columns
 term_dfs = {}
 
 # collect all five methods' answer for each term

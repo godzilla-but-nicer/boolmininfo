@@ -26,6 +26,6 @@ for rule in tqdm(range(n_rules)):
 
 # write out the dataframe
 df = pd.DataFrame(df_dict)
-df_fout = open(snakemake.output[0], 'w')
+df_fout = open(snakemake.output.ccs, 'w')
 df.to_csv(df_fout)
 df_fout.close()

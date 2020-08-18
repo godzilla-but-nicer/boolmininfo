@@ -8,9 +8,12 @@ PAPER_DIR = config["paper_dir"]
 PAPER_SRC, SUPP_SRC = [j(PAPER_DIR, f) for f in ("main.tex", "supp.tex")]
 PAPER, SUPP = [j(PAPER_DIR, f) for f in ("main.pdf", "supp.pdf")]
 
-rule all:
-    input:
-        PAPER, SUPP
+# rule all:
+#     input:
+#         PAPER, SUPP
+
+wildcard_constraints:
+   seqfile = '\w+'
 
 rule paper:
     input:
@@ -23,13 +26,61 @@ rule paper:
         "cd {params.paper_dir}; make"
 
 # PID over all three-input boolean functions
-rule eca_decomposition:
+rule eca_ccs:
     input:
-        "pyscripts/eca_analysis_{method}.py"
+        "pyscripts/eca_analysis_ccs.py"
     output:
-        "data/eca_decompositions/{method}_df.csv"
+        ccs="data/eca_decompositions/ccs_df.csv"
     script:
-        "pyscripts/eca_analysis_{wildcards.method}.py"
+        "pyscripts/eca_analysis_ccs.py"
+
+rule eca_gh:
+    input:
+        "pyscripts/eca_analysis_gh.py"
+    output:
+        gh="data/eca_decompositions/gh_df.csv"
+    script:
+        "pyscripts/eca_analysis_gh.py"
+
+rule eca_imin:
+    input:
+        "pyscripts/eca_analysis_imin.py"
+    output:
+        imin="data/eca_decompositions/imin_df.csv"
+    script:
+        "pyscripts/eca_analysis_imin.py"
+
+rule eca_pm:
+    input:
+        "pyscripts/eca_analysis_pm.py"
+    output:
+        pm="data/eca_decompositions/pm_df.csv"
+    script:
+        "pyscripts/eca_analysis_pm.py"
+
+rule eca_syndisc:
+    input:
+        "pyscripts/eca_analysis_syndisc.py"
+    output:
+        syndisc="data/eca_decompositions/syndisc_df.csv"
+    script:
+        "pyscripts/eca_analysis_syndisc.py"
+
+rule eca_wedge:
+    input:
+        "pyscripts/eca_analysis_wedge.py"
+    output:
+        wedge="data/eca_decompositions/wedge_df.csv"
+    script:
+        "pyscripts/eca_analysis_wedge.py"
+    
+rule literal_distribution:
+    input:
+        "pyscripts/literal_distribution_thing.py"
+    output:
+        binary="data/eca_decompositions/binary_df.csv"
+    script:
+        "pyscripts/eca_literal_distribution.py"
 
 # Compare the three input PIDs
 rule eca_pid_correlations:

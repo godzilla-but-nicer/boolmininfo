@@ -3,7 +3,7 @@
 
 % Figures
 \usepackage{graphicx}
-\graphicspath{{../../figs/}}
+\graphicspath{{../../plots/}}
 
 % Math
 \usepackage{amsmath}
@@ -19,7 +19,7 @@
 \def\vs{vs.\ }
 
 % Refs
-\usepackage{biblatex}
+\usepackage[style=nature, backend=bibtex]{biblatex}
 \addbibresource{main.bib}
 
 \usepackage{url}
@@ -41,28 +41,96 @@
 \def\del#1{ {\color{light-gray}{#1}} }
 \def\yy#1{\footnote{\color{red}\textbf{yy: #1}} }
 
+% subfigures
+\usepackage{caption}
+\usepackage{subcaption}
+
 %}}}
 
 \begin{document} %{{{
 
-\title{An awesome paper} %{{{
+\title{Information theory for discrete modelling} %{{{
 \date{\today}
 \maketitle %}}}
 
 \section{Introduction}\label{sec:introduction} %{{{
 
-
 %}}}
 
-\section{Results}\label{sec:results} %{{{ 
+\section{Boolean Minimization}\label{sec:boolmin} %{{{ 
 
+Boolean functions consist of a set of inputs that take boolean values and 
+collectively determine the transition of the overall function. The function 
+itself also takes a boolean value as its state and can transition between these
+state values. The rule by which the function transitions is often described in a
+look up table (LUT). An example of such a LUT can be seen in 
+\figref{parity_lut}. [I supose I should give a proper treatment to what exactly
+a boolean automaton is here. That can be filled in later once I have the 
+skeleton laid out.]
 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[A]{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/parity_lut.pdf}
+        \label{fig:parity_lut}
+        \caption{\label{fig:parity_lut}}
+    \end{subfigure}
+    \begin{subfigure}[B]{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/parity_ts.pdf}
+        \label{fig:parity_ts}
+        \caption{\label{fig:parity_ts}}
+    \end{subfigure}
+    \caption{Visual descriptions of three bit parity: 
+    (\subref{fig:parity_lut}) Unmodified look up table (LUT);
+    (\subref{fig:parity_ts}) Minimized schemata.}
+    \label{fig:parity}
+\end{figure}
+
+Boolean minimization is a process by which the number of rows in the LUT of a
+boolean function is minimized. Typically, this is achieved by replacing 
+non-informative input states with ``wildcards" (shown as \# in the schemata in
+\figref{parity_ts}) that represent an indifference to the actual state of that 
+input in determining the transition. This process can be achieved efficiently
+through the Quine-McCluskey method of prime implicants \cite{quine_way_1955}.
+
+Boolean functions can be further reduced by leveraging the observation that in
+many cases it does not matter which input adopts a particular state. In the case
+of the parity function shown in \figref{parity} it does not matter which input 
+is in the ON (1) state so long as only one input is in the ON state. The inputs 
+can be symmetrical with respect to one another's states 
+\cite{marques-pita_canalization_2013}. This can be seen very 
+obviously in the \textit{two-symbol schemata} for the three bit parity function
+shown in \figref{parity_ts}. The name \textit{two-symbol} refers to the use
+of a second, ``position-free," symbol $^\circ$.
+
+These redescriptions highlight the role of boolean functions as models of 
+information processing elements. \textit{Boolean networks} composed of many
+boolean functions, each serving as inputs to other functions in the network are
+canonical models of complex systems, particularly those involved in information
+processing in biological systems \cite{kauffman_emergent_1984,willadsen_robustness_2007,marques-pita_canalization_2013} 
+[get more of these into the .bib probably]. Despite their use in modelling
+information processing, formal measures from information theory lag behind. This
+stems largely from the fact that measures based on Shannon entropy are unsuited
+to dealing with polyadic relationships 
+\cite{james_information_2016,james_multivariate_2017} such as the ones almost
+universally present in boolean functions. 
 %}}}
+
+\section{Partial Information Decomposition}\label{sec:partial}
+
+Partial Information Decomposition (PID) is a framework originally proposed by
+Williams and Beer \cite{williams_nonnegative_2010}. In this framework the
+total information between a set of source varibles ($S = \{X_1, X_2\}$) and a 
+target variable ($T$) are decomposed into different non-overlapping pieces. 
+\textit{Redundancy} is information that could be provided by any variable in 
+the set of sources. 
 
 \section{Methods}\label{sec:methods} %{{{
 
 %}}}
 
-\printbibliography{}
+\printbibliography
     
 \end{document} %}}}
