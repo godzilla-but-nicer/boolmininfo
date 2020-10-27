@@ -1,11 +1,22 @@
+# old scripts
+scripts/unused
+
+# unsorted bullshit
+*.pdf
+*.png
+*.pkl
+
 # Workflow memory files
 .snakemake/
 .vscode/
 dag.svg
 
 # Data files and plots
-data/
 plots/
+presentations/
+paper/
+notes.txt
+notebooks/*.graphml
 
 # local dit install
 src/

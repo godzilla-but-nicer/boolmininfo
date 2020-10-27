@@ -18,3 +18,15 @@ eca_scripts:
   pm: "scripts/decompositions/eca_analysis_pm.py"
   ccs: "scripts/decompositions/eca_analysis_ccs.py"
   # syndisc: "scripts/decompositions/eca_analysis_syndisc.py"
+
+k2_decompositions:
+  imin: "data/k2_decompositions/imin_df.csv"
+  wedge: "data/k2_decompositions/wedge_df.csv"
+  pm: "data/k2_decompositions/pm_df.csv"
+  ccs: "data/k2_decompositions/ccs_df.csv"
+  broja: "data/k2_decompositions/broja_df.csv"
+  dep: "data/k2_decompositions/dep_df.csv"
+
+    
+
+
