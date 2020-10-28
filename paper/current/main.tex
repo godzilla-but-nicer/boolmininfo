@@ -3,7 +3,7 @@
 
 % Figures
 \usepackage{graphicx}
-\graphicspath{{../../figs/}}
+\graphicspath{{../../plots/}}
 
 % Math
 \usepackage{amsmath}
@@ -19,7 +19,7 @@
 \def\vs{vs.\ }
 
 % Refs
-\usepackage{biblatex}
+\usepackage[style=nature, backend=bibtex]{biblatex}
 \addbibresource{main.bib}
 
 \usepackage{url}
@@ -41,28 +41,278 @@
 \def\del#1{ {\color{light-gray}{#1}} }
 \def\yy#1{\footnote{\color{red}\textbf{yy: #1}} }
 
+% subfigures
+\usepackage{caption}
+\usepackage{subcaption}
+
 %}}}
 
 \begin{document} %{{{
 
-\title{An awesome paper} %{{{
+\title{Information theory for discrete modelling} %{{{
 \date{\today}
 \maketitle %}}}
 
 \section{Introduction}\label{sec:introduction} %{{{
 
-
 %}}}
 
-\section{Results}\label{sec:results} %{{{ 
+\section{Boolean Minimization}\label{sec:boolmin} %{{{ 
 
+Boolean functions consist of a set of inputs that take boolean values and 
+collectively determine the transition of the overall function. The function 
+itself also takes a boolean value as its state and can transition between these
+state values. The rule by which the function transitions is often described in a
+look up table (LUT). An example of such a LUT can be seen in 
+\figref{parity_lut}. [I supose I should give a proper treatment to what exactly
+a boolean automaton is here. That can be filled in later once I have the 
+skeleton laid out.]
 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[A]{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/high_synergy/parity_lut.pdf}
+        \label{fig:parity_lut}
+        \caption{\label{fig:parity_lut}}
+    \end{subfigure}
+    \begin{subfigure}[B]{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/high_synergy/parity_ts.pdf}
+        \label{fig:parity_ts}
+        \caption{\label{fig:parity_ts}}
+    \end{subfigure}
+    \caption{Visual descriptions of three bit parity: 
+    (\subref{fig:parity_lut}) Unmodified look up table (LUT);
+    (\subref{fig:parity_ts}) Minimized schemata.}
+    \label{fig:parity}
+\end{figure}
+
+Boolean minimization is a process by which the number of rows in the LUT of a
+boolean function is minimized. Typically, this is achieved by replacing 
+non-informative input states with ``wildcards" (shown as \# in the schemata in
+\figref{parity_ts}) that represent an indifference to the actual state of that 
+input in determining the transition. This process can be achieved efficiently
+through the Quine-McCluskey method of prime implicants \cite{quine_way_1955}.
+
+Boolean functions can be further reduced by leveraging the observation that in
+many cases it does not matter which input adopts a particular state. In the case
+of the parity function shown in \figref{parity} it does not matter which input 
+is in the ON (1) state so long as only one input is in the ON state. The inputs 
+can be symmetrical with respect to one another's states 
+\cite{marques-pita_canalization_2013}. This can be seen very 
+obviously in the \textit{two-symbol schemata} for the three bit parity function
+shown in \figref{parity_ts}. The name \textit{two-symbol} refers to the use
+of a second, ``position-free," symbol $^\circ$.
+
+These redescriptions highlight the role of boolean functions as models of 
+information processing elements. \textit{Boolean networks} composed of many
+boolean functions, each serving as inputs to other functions in the network are
+canonical models of complex systems, particularly those involved in information
+processing in biological systems \cite{kauffman_emergent_1984,willadsen_robustness_2007,marques-pita_canalization_2013} 
+[get more of these into the .bib probably]. Despite their use in modelling
+information processing, formal measures from information theory lag behind. This
+stems largely from the fact that measures based on Shannon entropy are unsuited
+to dealing with polyadic relationships 
+\cite{james_information_2016,james_multivariate_2017} such as the ones almost
+universally present in boolean functions. 
 %}}}
+
+\section{Partial Information Decomposition}\label{sec:partial}
+
+Partial Information Decomposition (PID) is a framework originally proposed by
+Williams and Beer \cite{williams_nonnegative_2010}. In this framework the
+total information between a set of source varibles ($S = \{X_1, X_2\}$) and a 
+target variable ($T$) are decomposed into different non-overlapping pieces. 
+\textit{Redundancy} is information that could be provided by any variable in 
+the set of sources.
+
+\section{Canalization Enables Non-Synergistic Information}\label{sec:enables}
+
+\subsection{Unique information}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/unique/lut_3.pdf}
+        \label{fig:lut3}
+        \caption{\label{fig:lut3}}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/unique/sc_3.pdf}
+        \label{fig:ts3}
+        \caption{\label{fig:ts3}}
+    \end{subfigure}
+    \caption{lookup table and minimized schemata for a two input boolean 
+    function showing unique information.
+    (\subref{fig:lut3}) lookup table;
+    (\subref{fig:ts3}) Left: Wildcard schemata, Right: Two symbol schemata}
+    \label{fig:rule3}
+\end{figure}
+
+Figure \ref{fig:rule3} shows a visual description of a two input boolean 
+function for which most of our partial information decompositions attribute all 
+of the information to come uniquely from input 1. Looking at the lookup table, 
+we can see this pattern (\figref{lut3}), however by looking at the schemata it 
+is quite obvious (\figref{ts3}).
+
+The schemata in \figref{ts3}, particularly the two-symbol schemata 
+($\mathbf{F^{''}}$) shown on the right explicitly tell us all of the ways in 
+which information moves through this logic gate. Each row of the table describes
+a schema and these schema are the ways in which information moves through the 
+gate. In this case we have two modes of information transfer 
+$f^{''}_1 \in \mathbf{F^{''}}, f^{''}_2 \in \mathbf{F^{''}}$. In both entries 
+to $\mathbf{F^{''}}$ input 2 contains a wildcard. This indicates that either 
+ON of OFF is allowed in that position---we "don't care". This lack of dependence 
+implies a lack of information coming from that input when it contains a wildcard. 
+Because both entries to $\mathbf{F^{''}}$ contain wildcards in input 2, input 1 
+must be solely responsible for the information through the gate. Input 2 is 
+wholly "redundant" but it does not provide "redundant" information in the 
+information theoretic sense.
+
+\del{I want to give this kind of canalization--all states of one input 
+sufficient to control transition--a name, maybe like "hard canalization" 
+or something.}
+
+\subsection{Synergy}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/synergy/lut_6.pdf}
+        \label{fig:lut6}
+        \caption{\label{fig:lut6}}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/synergy/sc_6.pdf}
+        \label{fig:ts6}
+        \caption{\label{fig:ts6}}
+    \end{subfigure}
+    \caption{lookup table and minimized schemata for a two input boolean 
+    function showing synergistic information.
+    (\subref{fig:lut6}) lookup table;
+    (\subref{fig:ts6}) Left: Wildcard schemata, Right: Two symbol schemata}
+    \label{fig:rule6}
+\end{figure}
+
+Here in \figref{rule3} we have the non-canalizing XOR function. All of our PID 
+methods attribute all of the information across this gate to synergy between 
+both inputs. We can see the lack of canalization in this function on the left 
+in \figref{ts6} where no wildcards ever appear in $\mathbf{F^{'}}$. This means 
+that all inputs are always needed to control the transition. This dependency on 
+multiple inputs for the same transition is synergy.
+
+On the right in \figref{ts6} we see the position-free symbol for both inputs in 
+$f^{''}_3$. This indicates that these states may be permuted across any of the 
+inputs that share this symbol without changing the transition. Groups of states 
+that share the same position-free symbol are called group-invariant enputs. We 
+will show later that these group-invariant enputs serve as fundamental 
+information sources rather than inputs. Whether a function contains schema with 
+position-free symbols alone, however, does not change the way that information 
+flows across the gate. Group-invariant enputs are also not necessary nor 
+sufficient for the existence of synergy. Indeed, $f^{''}_1$ and $f^{''}_2$ are 
+also synergistic modes of information transfer as we still need both inputs to 
+determine the transition.
+
+\subsection{Redundancy}
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/redundancy/lut_1.pdf}
+        \label{fig:lut1}
+        \caption{\label{fig:lut1}}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=4cm]{k2_schemata/redundancy/sc_1.pdf}
+        \label{fig:ts1}
+        \caption{\label{fig:ts1}}
+    \end{subfigure}
+    \caption{lookup table and minimized schemata for a two input boolean 
+    function showing redundant information.
+    (\subref{fig:lut1}) lookup table;
+    (\subref{fig:ts1}) Left: Wildcard schemata, Right: Two symbol schemata}
+    \label{fig:rule1}
+\end{figure}
+
+Redundancy is where things get interesting with canalization and partial 
+information. \figref{rule1} shows the lookup table and schemata for the OR 
+gate. Here, we see both wildcards and position-free symbols. Importantly, we 
+see wildcards and literals appear in the same group-invariant enput. This is 
+where redundancy comes from. In $f^{''}_2$ we see a transition where one input 
+must be ON, regardless of the value of the other input, and regardless of which 
+input is ON. Either input in the ON state is sufficient to determine the 
+transition. The information about this transition is distributed across the 
+group-invariant enput, but unlike in the synergistic case there is no 
+dependency within the group-invariant enput.
+
+This is distinct from unique information because there is never a case where 
+one input is able to provide information on its own that another input is 
+incapable of providing on its own. No single input is privileged over another 
+except in the transition covered by $f^{''}_1$ where both inputs together 
+provide information that could not be provided by either input alone.
+
+\subsection{A three-input example}
+
+Two-input boolean functions neatly show off the principles at play in how 
+canalization impacts information flow. These principles can be extended into 
+boolean functions with a higher number of inputs and applied to each of the 
+schema shown in the two-symbol schemata.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/high_synergy/no_middle_lut.pdf}
+        \label{fig:lutk3}
+        \caption{\label{fig:lutk3}}
+    \end{subfigure}
+    \begin{subfigure}{0.48\textwidth}
+        \centering
+        \includegraphics[height=6cm]{example_luts_schemata/high_synergy/no_middle_ts.pdf}
+        \label{fig:tsk3}
+        \caption{\label{fig:tsk3}}
+    \end{subfigure}
+    \caption{lookup table and minimized schemata for a modified three-input 
+    parity function where input 2 is insufficient to determine transition to 
+    ON.
+    (\subref{fig:lutk3}) lookup table;
+    (\subref{fig:tsk3}) Left: Wildcard schemata, Right: Two symbol schemata}
+    \label{fig:rulek3}
+\end{figure}
+
+\figref{rulek3} shows the lookup table for a modified parity function that 
+breaks the full synergy and introduces partial canalization (ECA rule 73). We 
+can determine the way that information moves through the function by looking 
+at each of the entries in the two symbol schemata shown on the right in 
+\figref{tsk3}. Two of these are very straight forward. $f^{''}_2$ and 
+$f^{''}_4$ contain neither wildcards nor position-free symbols and are easily 
+identified as the three-way synergy $\{123\}$. Additionally, $f^{''}_5$ 
+redescribes a pair of transitions with more flexible dependencies but that 
+still require all three inputs. Thus, $f^{''}_5$ is also an example of the 
+synergy $\{123\}$.
+
+There is another simple synergy captured in $f^{''}_1$. Input 2 provides no 
+information, but both inputs 1 and 2 control the transition. This is an 
+example of the synergy $\{13\}$. Finally, $f^{''}_3$ shows us the most complex 
+case. There are two situations that both provide information about the same 
+transition. The first is the one shown in the table where the states of inputs 
+1 and 2 can control the transition. The second is if the wildcard is in 
+position 1 and the OFF in input 3. In this case, inputs 2 and 3 collectively 
+control the transition. This means that we have two cases of synergy, both of 
+which provide exactly the same information. This entry describes a redundancy 
+between two synergies $\{12\}\{23\}$.
 
 \section{Methods}\label{sec:methods} %{{{
 
 %}}}
 
-\printbibliography{}
+\printbibliography
     
 \end{document} %}}}

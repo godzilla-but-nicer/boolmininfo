@@ -1,3 +1,26 @@
+# old scripts
+scripts/unused
+
+# unsorted bullshit
+*.pdf
+*.png
+*.pkl
+
+# Workflow memory files
+.snakemake/
+.vscode/
+dag.svg
+
+# Data files and plots
+plots/
+presentations/
+paper/
+notes.txt
+notebooks/*.graphml
+
+# local dit install
+src/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
