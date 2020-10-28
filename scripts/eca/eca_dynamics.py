@@ -13,7 +13,7 @@ for rule in rules:
     for n_cell in n_cells:
         row = {}
         row['rule'] = rule
-        row['n_cells'] = n_cells
+        row['n_cells'] = n_cell
 
         # load the graph
         STG = nx.read_graphml(snakemake.input.stg_dir + str(rule) +
