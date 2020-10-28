@@ -231,7 +231,7 @@ rule eca_pid_plots:
 # Get state transition graphs for ECA up to 16 cells
 rule eca_stgs:
     input:
-        'scripts/eca/eca_stgs.py'
+        ancient('scripts/eca/eca_stgs.py')
     output:
         stgs=directory('data/eca_stgs/')
     script:
@@ -245,3 +245,13 @@ rule stg_dynamics:
         'data/eca_dynamics.csv'
     script:
         'scripts/eca/eca_dynamics.py'
+
+# extract regressed features from the dynamics table
+# these are functions of the number of cells for attractors, periods, etc.
+rule eca_regress_dynamics:
+    input:
+        dyn_csv='data/eca_dynamics.csv'
+    output:
+        'data/eca_dynamics_regressed.csv'
+    script:
+        'scripts/eca/eca_regress_dynamics.py'

@@ -1,7 +1,7 @@
 import numpy as np
 import networkx as nx
 import pandas as pd
-from binarize import to_binary, to_decimal
+from ..binarize import to_binary, to_decimal
 from copy import copy, deepcopy
 
 df_list = []
