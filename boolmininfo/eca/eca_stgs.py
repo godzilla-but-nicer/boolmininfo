@@ -2,7 +2,7 @@ import numpy as np
 import networkx as nx
 import os
 from tqdm import tqdm
-from binarize import to_binary
+from ..binarize import to_binary
 
 def step(state, rule_bin):
     """ Takes a complete state vector of the system at a time point

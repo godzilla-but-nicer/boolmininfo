@@ -1,13 +1,13 @@
 import numpy as np
 import networkx as nx
 import pandas as pd
-from binarize import to_binary, to_decimal
+from boolmininfo.binarize import to_binary, to_decimal
 from copy import copy, deepcopy
 
 df_list = []
 
 rules = range(2**8)
-n_cells = range(3, 17)
+n_cells = [12, 14, 16]
 
 for rule in rules:
     for n_cell in n_cells:
@@ -25,8 +25,7 @@ for rule in rules:
         cycles = nx.simple_cycles(STG)
         cycle_lens = [len(c) for c in cycles]
 
-        row['mean_period'] = np.mean(cycle_lens)
-        row['var_period'] = np.var(cycle_lens)
+        row['max_period'] = np.max(cycle_lens)
 
         # transient lengths
         t_len = []
@@ -50,8 +49,7 @@ for rule in rules:
                         level[pred] = level[base] + 1
                 t_len.extend([l for l in level.values()])
 
-        row['mean_transient'] = np.mean(t_len)
-        row['var_transient'] = np.var(t_len)
+        row['mean_transient'] = np.max(t_len)
 
         # derrida coefficient
         derrida = 0
@@ -83,6 +81,11 @@ for rule in rules:
         derrida /= 2 * n_cell * 2**n_cell
 
         row['derrida_coeff'] = derrida
+
+        # ratio between configs in transient vs configs in attractor
+        total_configs = 2**n_cell
+        total_attractor = np.sum(cycle_lens)
+        row['transient_to_attractor'] = (total_configs - total_attractor) / total_attractor
 
         # add the row to the list
         df_list.append(row)
