@@ -17,6 +17,7 @@ presentations/
 paper/
 notes.txt
 notebooks/*.graphml
+boolmininfo/unused/
 
 # local dit install
 src/
