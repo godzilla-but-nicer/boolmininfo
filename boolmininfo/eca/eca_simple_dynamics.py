@@ -49,7 +49,7 @@ for rule in rules:
                         level[pred] = level[base] + 1
                 t_len.extend([l for l in level.values()])
 
-        row['mean_transient'] = np.max(t_len)
+        row['max_transient'] = np.max(t_len)
 
         # derrida coefficient
         derrida = 0

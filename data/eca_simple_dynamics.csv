@@ -1,4 +1,4 @@
-,rule,n_cells,m_attractors,max_period,mean_transient,derrida_coeff,transient_to_attractor
+,rule,n_cells,m_attractors,max_period,max_transient,derrida_coeff,transient_to_attractor
 0,0,12,1,1,1,0.0,4095.0
 1,0,14,1,1,1,0.0,16383.0
 2,0,16,1,1,1,0.0,65535.0
