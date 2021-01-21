@@ -38,12 +38,16 @@ def to_binary(n, digits=8):
 def array_in(a1, arr_list):
     return any((a1 == ai).all() for ai in arr_list)
 
+
+# load the dataframe to get the list of rules to simulate
+eca_df = pd.read_csv('data/eca_equiv_classes.csv', index_col=None)
+sim_rules = eca_df['rule']
+
 # per run parameters
 trials = 100
-N = 102
+N = 500
 max_step = 1000000
 center_size = 20
-rule = 15
 
 # initialize in center only as in Langton 199x
 # center = np.round(rng.uniform(size=20)).astype(np.int8)
@@ -51,31 +55,34 @@ rule = 15
 # pad = np.zeros(pad_size).astype(np.int8)
 # state = np.hstack((pad, center, pad))
 
-# initialize state and vectors for calculating stats
-state = np.round(rng.uniform(size=N)).astype(np.int8)
-periods = np.zeros(trials) - 1
-transients = np.zeros(trials)
 
-binary_rule = to_binary(rule, 8)
-# if we want to print the thing
+for rule in sim_rules:
+    # initialize vectors for calculating stats
+    periods = np.zeros(trials) - 1
+    transients = np.zeros(trials)
 
-for ti in tqdm(range(trials)):
-    state_history = []
-    state = np.round(rng.uniform(size=N)).astype(np.int8)
-    for si in range(max_step):
-        # update the state
-        state = step(state, binary_rule)
-        # if we've seen this state before we're done
-        if array_in(state, state_history):
-            print(si)
-            # we can calculate period and transient for this run
-            for period_len, prev_state in enumerate(state_history[::-1]):
-                if np.array_equal(prev_state, state):
-                    periods[ti] = period_len + 1
-                    transients[ti] = len(state_history) - period_len - 1
-            # and move to next trial
-            break
-        # otherwise record state and continue
-        else:
-            state_history.append(state)
+    binary_rule = to_binary(rule, 8)
+    # if we want to print the thing
+
+    for ti in range(trials):
+        state_history = []
+        state = np.round(rng.uniform(size=N)).astype(np.int8)
+        for si in range(max_step):
+            # update the state
+            state = step(state, binary_rule)
+            # if we've seen this state before we're done
+            if array_in(state, state_history):
+                # we can calculate period and transient for this run
+                for period_len, prev_state in enumerate(state_history[::-1]):
+                    if np.array_equal(prev_state, state):
+                        periods[ti] = period_len + 1
+                        transients[ti] = len(state_history) - period_len - 1
+                # and move to next trial
+                break
+            # otherwise record state and continue
+            else:
+                state_history.append(state)
+
+    np.savetxt('data/big_eca_runs/' + str(rule) + '_periods.csv', periods)
+    np.savetxt('data/big_eca_runs/' + str(rule) + '_transients.csv', transients)
 
