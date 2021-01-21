@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import sys
 from tqdm import tqdm
 # from ..binarize import to_binary
 # from .eca_stgs import step
@@ -41,7 +42,7 @@ def array_in(a1, arr_list):
 
 # load the dataframe to get the list of rules to simulate
 eca_df = pd.read_csv('data/eca_equiv_classes.csv', index_col=None)
-sim_rules = eca_df['rule']
+sim_rules = eca_df[eca_df['rule'] == 3]['rule']
 
 # per run parameters
 trials = 100
@@ -55,8 +56,14 @@ center_size = 20
 # pad = np.zeros(pad_size).astype(np.int8)
 # state = np.hstack((pad, center, pad))
 
+# allow for command-line specification of rules
+if len(sys.argv) > 1:
+    sim_rules = [int(sys.argv[1])]
+
+print(sim_rules)
 
 for rule in sim_rules:
+    print('Rule:', rule)
     # initialize vectors for calculating stats
     periods = np.zeros(trials) - 1
     transients = np.zeros(trials)
@@ -65,6 +72,7 @@ for rule in sim_rules:
     # if we want to print the thing
 
     for ti in range(trials):
+        print('\t' + str(ti + 1) + '/' + trials)
         state_history = []
         state = np.round(rng.uniform(size=N)).astype(np.int8)
         for si in range(max_step):
